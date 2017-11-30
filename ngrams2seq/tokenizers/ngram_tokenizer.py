@@ -1,6 +1,6 @@
 from typing import List
 
-from nltk import ngrams
+from nltk import everygrams
 from overrides import overrides
 
 from allennlp.common import Params
@@ -16,25 +16,27 @@ class NgramTokenizer(Tokenizer):
    
     Parameters
     ----------
-    ngram_degree : int
+    max_ngram_degree : int
     'N' parameter in ngram definition. 
     It represents how many words each ngram should contain,  e.g. 2 for 2gram, 3 for 3gram, etc.
     """
+    # TODO(maxdel): add option for option left and rigth <SOS> and <EOS> symbols for each ngram.
+    # It can be easily done with nltk's ngram function (it has corresponding formal arguments)
     def __init__(self,
-                 ngram_degree: int) -> None:
-        self._ngram_degree = ngram_degree
+                 max_ngram_degree: int) -> None:
+        self._max_ngram_degree = max_ngram_degree
 
     @overrides
     def tokenize(self, text: str) -> List[Token]:
         """
-        Splits words to ngrams using nltk
+        Splits sentences into a set of all possible ngrams up to self._max_ngram_degree using nltk
         """
-        ngrams_iterator = ngrams(text.split(), self._ngram_degree)
+        ngrams_iterator = everygrams(text.split(), max_len=self._max_ngram_degree)
         tokens = [Token(" ".join(ngram)) for ngram in ngrams_iterator]
         return tokens    
 
     @classmethod
     def from_params(cls, params: Params) -> 'NgramTokenizer':
-        ngram_degree = params.pop('ngram_degree')
+        max_ngram_degree = params.pop('max_ngram_degree')
         params.assert_empty(cls.__name__)
-        return cls(ngram_degree=ngram_degree)
+        return cls(max_ngram_degree=max_ngram_degree)
