@@ -12,6 +12,6 @@ class BypassSeq2SeqEncoderTest(AllenNlpTestCase):
     def test_bypass_passes_without_change(self):
         encoder = BypassSeq2SeqEncoder(input_dim = 2)
         input = numpy.array([[1.0],[2.0],[3.0],[4.0]], dtype='f')
-        input_tensor = Variable(torch.FloatTensor(input))
-        encoded = encoder(input_tensor).data.numpy()
+        input_var = Variable(torch.FloatTensor(input))
+        encoded = encoder(input_var).data.numpy()
         assert_equal(encoded, input) 
