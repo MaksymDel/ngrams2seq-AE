@@ -2,21 +2,17 @@
 
 from allennlp.common import Params
 from allennlp.common.testing import AllenNlpTestCase
-from ngrams-ae.data.tokenizers import WordTokenizer
+from ngrams2seq.tokenizers import NgramTokenizer
 
-class TestWordTokenizer(AllenNlpTestCase):
+class TestNgramTokenizer(AllenNlpTestCase):
     def test_passes_through_correctly(self):
-        tokenizer = WordTokenizer(start_tokens=['@@', '%%'], end_tokens=['^^'])
-        sentence = "this (sentence) has 'crazy' \"punctuation\"."
-        tokens = [t.text for t in tokenizer.tokenize(sentence)]
-        expected_tokens = ["@@", "%%", "this", "(", "sentence", ")", "has", "'", "crazy", "'", "\"",
-                           "punctuation", "\"", ".", "^^"]
+        tokens = None
+        expected_tokens = None
+
         assert tokens == expected_tokens
 
-    def test_stems_and_filters_correctly(self):
-        tokenizer = WordTokenizer.from_params(Params({'word_stemmer': {'type': 'porter'},
-                                                      'word_filter': {'type': 'stopwords'}}))
-        sentence = "this (sentence) has 'crazy' \"punctuation\"."
-        expected_tokens = ["sentenc", "ha", "crazi", "punctuat"]
-        tokens = [t.text for t in tokenizer.tokenize(sentence)]
+    def test_from_params_ngram_degree_option_passes_correctly(self):
+        tokens = None
+        expected_tokens = None
+
         assert tokens == expected_tokens

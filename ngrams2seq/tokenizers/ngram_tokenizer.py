@@ -1,6 +1,6 @@
-from nltk import ngrams
 from typing import List
 
+from nltk import ngrams
 from overrides import overrides
 
 from allennlp.common import Params
