@@ -9,4 +9,4 @@ The problem can be representet in terms of allennlp abstractions following way:
 3) [Filed]: source TextFiled based on ngram tokens; target TextField based on word tokens
 4) [TokenEmbedder]: embeds each ngram words separatly, and then computes single vector representation for each ngram with RNN
 5) [Encoder]: just passes bag of ngrams forward (bypass encoder)
-6) [AttentionalDecoder]: takes encoder outputs (bag of ngrams), and tryies to reconstruct orgiginal sentence based on it 
+6) [AttentionalDecoder]: takes encoder outputs (bag of ngrams), and tryies to reconstruct orgiginal sentence based on it
