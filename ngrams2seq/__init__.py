@@ -4,3 +4,5 @@ from ngrams2seq.encoders import *
 from ngrams2seq.models import *
 from ngrams2seq.token_indexers import *
 from ngrams2seq.tokenizers import *
+from ngrams2seq.predictors import Ngrams2SeqPredictor
+

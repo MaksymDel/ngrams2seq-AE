@@ -139,6 +139,7 @@ class SimpleSeq2Seq(Model):
             num_decoding_steps = target_sequence_length - 1
         else:
             num_decoding_steps = self._max_decoding_steps
+        
         decoder_hidden = final_encoder_output
         decoder_context = Variable(encoder_outputs.data.new()
                                    .resize_(batch_size, self._decoder_output_dim).fill_(0))
@@ -146,6 +147,7 @@ class SimpleSeq2Seq(Model):
         step_logits = []
         step_probabilities = []
         step_predictions = []
+        step_attention_weights = []
         for timestep in range(num_decoding_steps):
             if self.training and all(torch.rand(1) >= self._scheduled_sampling_ratio):
                 input_choices = targets[:, timestep]
@@ -155,12 +157,14 @@ class SimpleSeq2Seq(Model):
                     # (batch_size,)
                     input_choices = Variable(source_mask.data.new()
                                              .resize_(batch_size).fill_(self._start_index))
+                    
+                    
                 else:
                     input_choices = last_predictions
 
             encoder_outputs_mask = source_mask.sum(2) != 0 # MANUAL MASKING CHANGE. PROBABLY SHOULD CHANGE IT UPPER AS WELL
             
-            decoder_input = self._prepare_decode_step_input(input_choices, decoder_hidden,
+            decoder_input, attention_weights = self._prepare_decode_step_input(input_choices, decoder_hidden,
                                                             encoder_outputs, encoder_outputs_mask)
             decoder_hidden, decoder_context = self._decoder_cell(decoder_input,
                                                                  (decoder_hidden, decoder_context))
@@ -174,14 +178,34 @@ class SimpleSeq2Seq(Model):
             last_predictions = predicted_classes
             # (batch_size, 1)
             step_predictions.append(last_predictions.unsqueeze(1))
+            # (batch_size, num_encoder_outputs)
+            if (attention_weights is not None):
+                step_attention_weights.append(attention_weights)
+
         # step_logits is a list containing tensors of shape (batch_size, 1, num_classes)
         # This is (batch_size, num_decoding_steps, num_classes)
         logits = torch.cat(step_logits, 1)
         class_probabilities = torch.cat(step_probabilities, 1)
         all_predictions = torch.cat(step_predictions, 1)
+
+        # step_attention_weights is a list containing tensors of shape (batch_size, num_encoder_outputs)
+        # This is (batch_size, num_decoding_steps, num_encoder_outputs)
+        if len(step_attention_weights) > 0:
+            attention_matrix = torch.cat(step_attention_weights, 0)
+        
+        if target_tokens:
+            pass
+        else:
+            #printprint(attention_matrix) # TODO(maxdel): move this to separte module
+            pass
+
+        attention_matrix = attention_matrix.unsqueeze(0)
+
         output_dict = {"logits": logits,
                        "class_probabilities": class_probabilities,
-                       "predictions": all_predictions}
+                       "predictions": all_predictions,
+                       "attention_matrix": attention_matrix}
+
         if target_tokens:
             target_mask = get_text_field_mask(target_tokens)
             loss = self._get_loss(logits, targets, target_mask)
@@ -225,14 +249,15 @@ class SimpleSeq2Seq(Model):
             # complain.
             encoder_outputs_mask = encoder_outputs_mask.type(torch.FloatTensor)
             # (batch_size, input_sequence_length)
-            #decoder_hidden_state = decoder_hidden_state.unsqueeze(0)            
+            #decoder_hidden_state = decoder_hidden_state.unsqueeze(0)
             input_weights = self._decoder_attention(decoder_hidden_state, encoder_outputs, encoder_outputs_mask)
+            # TODO(maxdel): MOVE TO PROPER MODULE): PRINT ATTENTION
             # (batch_size, encoder_output_dim)
             attended_input = weighted_sum(encoder_outputs, input_weights)
             # (batch_size, encoder_output_dim + target_embedding_dim)
-            return torch.cat((attended_input, embedded_input), -1)
+            return torch.cat((attended_input, embedded_input), -1), input_weights
         else:
-            return embedded_input
+            return embedded_input, None # TODO(maxdel): document this attention matrix return
 
     @staticmethod
     def _get_loss(logits: torch.LongTensor,
@@ -279,18 +304,24 @@ class SimpleSeq2Seq(Model):
         predicted_indices = output_dict["predictions"]
         if not isinstance(predicted_indices, numpy.ndarray):
             predicted_indices = predicted_indices.data.cpu().numpy()
+            
         all_predicted_tokens = []
         for indices in predicted_indices:
             indices = list(indices)
             # Collect indices till the first end_symbol
             if self._end_index in indices:
                 indices = indices[:indices.index(self._end_index)]
-            predicted_tokens = [self.vocab.get_token_from_index(x, namespace="target_tokens")
+            predicted_tokens = [self.vocab.get_token_from_index(x, namespace=self._target_namespace) # Allennlp bug: do not hardcore this!
                                 for x in indices]
             all_predicted_tokens.append(predicted_tokens)
-        if len(all_predicted_tokens) == 1:
-            all_predicted_tokens = all_predicted_tokens[0]  # type: ignore
+
+        # if len(all_predicted_tokens) == 1:
+        #     all_predicted_tokens = all_predicted_tokens[0]  # type: ignore
+        # (TODO: make PR) lines above should be uncommented, since Model.forward_on_instance (from model.py) 
+        # expects 1st dimention to be batch size
+            
         output_dict["predicted_tokens"] = all_predicted_tokens
+
         return output_dict
 
     @classmethod
