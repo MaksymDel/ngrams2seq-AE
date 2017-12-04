@@ -19,20 +19,21 @@ from allennlp.models.model import Model
 from allennlp.nn.util import get_text_field_mask, sequence_cross_entropy_with_logits, weighted_sum
 
 
-@Model.register("simple_ngrams2seq")
-class SimpleSeq2Seq(Model):
+@Model.register("ngrams2seq")
+class Ngrams2Seq(Model):
     """
-    This ``SimpleSeq2Seq`` class is a :class:`Model` which takes a sequence, encodes it, and then
-    uses the encoded representations to decode another sequence.  You can use this as the basis for
-    a neural machine translation system, an abstractive summarization system, or any other common
-    seq2seq problem.  The model here is simple, but should be a decent starting place for
-    implementing recent models for these tasks.
+    This ``Ngrams2Seq`` class is a :class:`Model` which takes a sequence of ngram embeddings, encodes it,
+    and then uses the encoded representations to decode another sequence, or orginal sentence used to 
+    extract ngrams. In this case we are solving recunstruction task, where we predict the sentece from 
+    its Bag of Ngrams representation.
 
-    This ``SimpleSeq2Seq`` model takes an encoder (:class:`Seq2SeqEncoder`) as an input, and
+    This ``Ngrams2Seq`` model takes an dummy bypass encoder (:class:`BypassSeq2SeqEncoder`) as an input, and
     implements the functionality of the decoder.  In this implementation, the decoder uses the
     encoder's outputs in two ways. The hidden state of the decoder is intialized with the output
     from the final time-step of the encoder, and when using attention, a weighted average of the
-    outputs from the encoder is concatenated to the inputs of the decoder at every timestep.
+    outputs from the encoder is concatenated to the inputs of the decoder at every timestep. 
+    
+    It also keeps track of attention weights and returns attention matrix as a part of output dictionary.
 
     Parameters
     ----------
@@ -75,7 +76,7 @@ class SimpleSeq2Seq(Model):
                  target_embedding_dim: int = None,
                  attention_function: SimilarityFunction = None,
                  scheduled_sampling_ratio: float = 0.0) -> None:
-        super(SimpleSeq2Seq, self).__init__(vocab)
+        super(Ngrams2Seq, self).__init__(vocab)
         self._source_embedder = source_embedder
         self._encoder = encoder
         self._max_decoding_steps = max_decoding_steps

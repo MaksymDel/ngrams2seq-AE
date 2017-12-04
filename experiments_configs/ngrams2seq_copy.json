@@ -36,7 +36,7 @@
     "validation_data_path": "../../data/europarl/parallel_dev.en",
     
     "model": {
-      "type": "simple_ngrams2seq",
+      "type": "ngrams2seq",
 
       "source_embedder": {
         "ngram_words": {

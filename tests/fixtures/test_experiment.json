@@ -35,7 +35,7 @@
     "validation_data_path": "tests/fixtures/seq2seq_copy.tsv",
 
     "model": {
-      "type": "simple_ngrams2seq",
+      "type": "ngrams2seq",
 
       "source_embedder": {
         "ngram_words": {
