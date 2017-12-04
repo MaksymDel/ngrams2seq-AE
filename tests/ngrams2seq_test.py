@@ -6,7 +6,6 @@ from torch.autograd import Variable
 from allennlp.common.testing import ModelTestCase
 from allennlp.nn.util import arrays_to_variables, sequence_cross_entropy_with_logits
 
-
 class SimpleSeq2SeqWithoutAttentionTest(ModelTestCase):
     def setUp(self):
         super(SimpleSeq2SeqWithoutAttentionTest, self).setUp()

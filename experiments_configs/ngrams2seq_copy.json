@@ -5,7 +5,7 @@
       
       "source_tokenizer": {
         "type": "ngram",
-        "max_ngram_degree": 2
+        "max_ngram_degree": 4
       },
       
       "target_tokenizer": {
@@ -69,11 +69,11 @@
     "iterator": {
       "type": "bucket",
       "padding_noise": 0.0,
-      "batch_size" : 200
+      "batch_size" : 64
     },
 
     "trainer": {
-      "num_epochs": 5,
+      "num_epochs": 40,
       "patience": 4,
       "cuda_device": -1,
       "optimizer": {
