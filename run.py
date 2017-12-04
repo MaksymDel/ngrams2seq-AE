@@ -14,7 +14,7 @@ from ngrams2seq import *
 from allennlp.commands import main  # pylint: disable=wrong-import-position
 
 predictors = {
-    'simple_ngrams2seq': 'simple_ngrams2seq'
+    'ngrams2seq': 'ngrams2seq'
 }
 
 if __name__ == "__main__":

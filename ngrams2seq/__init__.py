@@ -2,6 +2,5 @@ from ngrams2seq.ngram_tokenizer import NgramTokenizer
 from ngrams2seq.ngram_words_indexer import NgramWordsIndexer
 from ngrams2seq.ngram_words_encoder import NgramWordsEncoder 
 from ngrams2seq.bypass_encoder import BypassSeq2SeqEncoder
-from ngrams2seq.ngrams2seq import SimpleSeq2Seq
+from ngrams2seq.ngrams2seq import Ngrams2Seq
 from ngrams2seq.predictors import Ngrams2SeqPredictor
-

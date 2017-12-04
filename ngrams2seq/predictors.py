@@ -5,10 +5,10 @@ from allennlp.common.util import JsonDict, sanitize
 from allennlp.data import Instance
 from allennlp.service.predictors.predictor import Predictor
 
-@Predictor.register('simple_ngrams2seq')
+@Predictor.register('ngrams2seq')
 class Ngrams2SeqPredictor(Predictor):
     """
-    Wrapper for the simple_ngram2seq model.
+    Wrapper for the ngram2seq model.
     """
     @overrides
     def _json_to_instance(self, json: JsonDict) -> Instance:
