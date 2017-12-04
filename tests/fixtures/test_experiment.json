@@ -17,7 +17,6 @@
         "ngram_words": {
           "type": "words",
           "word_tokenizer": {
-              //"type": "word",
               "word_splitter": {"type": "just_spaces"}
           },
           "namespace": "shared_words_vocab"
@@ -25,9 +24,9 @@
       },
       
       "target_token_indexers": {
-           "tokens": { // seq2seq models uses this name to fetch tokens
-           "type": "single_id",
-           "namespace": "shared_words_vocab"
+           "tokens": { 
+               "type": "single_id",
+               "namespace": "shared_words_vocab"
            }
       }
     },
@@ -40,7 +39,7 @@
 
       "source_embedder": {
         "ngram_words": {
-            "type": "character_encoding", // weak place; should be word_encoding
+            "type": "word_encoding",
             "embedding": {
                 "embedding_dim": 50,
                 "vocab_namespace": "shared_words_vocab"                
@@ -73,12 +72,11 @@
     },
 
     "trainer": {
-      "num_epochs": 200,
+      "num_epochs": 2,
       "patience": 10,
       "cuda_device": -1,
       "optimizer": {
-        "type": "adam",
-        "lr": 0.01
+        "type": "adam"
       }
     }
 

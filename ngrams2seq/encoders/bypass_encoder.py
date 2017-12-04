@@ -23,7 +23,7 @@ class BypassSeq2SeqEncoder(Seq2SeqEncoder, Registrable):
     """
 
     def __init__(self, 
-                 input_dim : int) -> None:
+                 input_dim: int) -> None:
         super(BypassSeq2SeqEncoder, self).__init__()
         self._input_dim = input_dim
 
