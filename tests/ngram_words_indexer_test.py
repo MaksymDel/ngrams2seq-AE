@@ -6,7 +6,7 @@ from allennlp.data import Token, Vocabulary
 from allennlp.data.tokenizers.word_tokenizer import WordTokenizer
 from allennlp.data.tokenizers.word_splitter import JustSpacesWordSplitter
 
-from ngrams2seq.token_indexers.ngram_words_indexer import NgramWordsIndexer
+from ngrams2seq.ngram_words_indexer import NgramWordsIndexer
 
 class NgramWordsIndexerTest(AllenNlpTestCase):
     def test_count_vocab_items_works_properly(self):

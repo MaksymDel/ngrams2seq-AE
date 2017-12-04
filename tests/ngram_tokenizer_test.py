@@ -2,7 +2,7 @@
 
 from allennlp.common import Params
 from allennlp.common.testing import AllenNlpTestCase
-from ngrams2seq.tokenizers import NgramTokenizer
+from ngrams2seq import NgramTokenizer
 
 class TestNgramTokenizer(AllenNlpTestCase):
     def test_passes_through_correctly(self):

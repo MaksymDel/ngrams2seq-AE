@@ -6,7 +6,7 @@ from torch.autograd import Variable
 
 from allennlp.common.testing import AllenNlpTestCase
 
-from ngrams2seq.encoders.bypass_encoder import BypassSeq2SeqEncoder
+from ngrams2seq.bypass_encoder import BypassSeq2SeqEncoder
 
 class BypassSeq2SeqEncoderTest(AllenNlpTestCase):
     def test_bypass_passes_without_change(self):
