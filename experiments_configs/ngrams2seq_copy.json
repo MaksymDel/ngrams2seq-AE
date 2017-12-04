@@ -25,7 +25,7 @@
       },
       
       "target_token_indexers": {
-           "tokens": { // seq2seq models uses this name to fetch tokens
+           "tokens": { 
            "type": "single_id",
            "namespace": "shared_words_vocab"
            }
@@ -40,7 +40,7 @@
 
       "source_embedder": {
         "ngram_words": {
-            "type": "character_encoding", // weak place; should be word_encoding
+            "type": "word_encoding",
             "embedding": {
                 "embedding_dim": 50,
                 "vocab_namespace": "shared_words_vocab"                
@@ -69,7 +69,7 @@
     "iterator": {
       "type": "bucket",
       "padding_noise": 0.0,
-      "batch_size" : 200 // should be changed
+      "batch_size" : 200
     },
 
     "trainer": {
