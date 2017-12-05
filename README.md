@@ -1,4 +1,8 @@
 # ngrams2seq AE
+
+To reproduce results install allennlp library from the following commit:
+https://github.com/allenai/allennlp/tree/31a5eb8b7f85e895071abe6c7665e5079d65f781
+
 This experment proposes autoencoder that generates sentence from its bag of ngrams representation      
 
 To implement the idea we use AllenNLP library. 
