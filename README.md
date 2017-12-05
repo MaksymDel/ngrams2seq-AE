@@ -1,8 +1,16 @@
 # ngrams2seq AE
 
-To reproduce results install allennlp library from the following commit:
-https://github.com/allenai/allennlp/tree/31a5eb8b7f85e895071abe6c7665e5079d65f781
+### Dependencies
+1) Fetch allennlp version specified in requirements.txt
+2) [optional] Get also https://github.com/M4t1ss/SoftAlignments if you want to visualize attention weights
 
+### Visualizing attentions
+First of all fetch https://github.com/M4t1ss/SoftAlignments.
+Attention matrix, which is input to the tool, saves automaticaly under the name att_matrix.txt.
+You can run a tool (e.g.) as a web server using following command (from SoftAlignments repository root folder): 
+python process_alignments.py -i *path_to_ngrams2seq*/att_matrix.txt -o web -f Nematus
+
+### TODO
 This experment proposes autoencoder that generates sentence from its bag of ngrams representation      
 
 To implement the idea we use AllenNLP library. 
