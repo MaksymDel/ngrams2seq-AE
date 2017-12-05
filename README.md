@@ -1,4 +1,14 @@
-# ngrams2seq AE
+# ngrams2seq
+The idea is to represent an input sentence as a bag of ngrams up to degree N, 
+and map them to the output sequence generating word by word, and attending to some 
+of the input ngrams.
+
+To embed an ngram, we first embed its words separatly, and then   
+sum/avarage separate word embeddings, or use RNN/CNN to get one vector
+for each ngram.
+
+Finaly, at each decoder step, an input to the decoder RNN is a concatenation of the output of the attention mechanism
+over the set of ngrams embeddings, and previously generated word.
 
 ### Dependencies
 1) Fetch allennlp version specified in requirements.txt
