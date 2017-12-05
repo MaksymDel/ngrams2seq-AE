@@ -131,7 +131,8 @@ class Ngrams2Seq(Model):
         encoder_outputs = self._encoder(embedded_input)
         # TODO: inspect bypass encoder and improve forward its func and constructor
 
-        final_encoder_output = encoder_outputs[:, -1]  # (batch_size, encoder_output_dim)
+        encoder_outputs_summary = encoder_outputs.mean(1)  # (batch_size, encoder_output_dim)
+
         if target_tokens:
             targets = target_tokens["tokens"]
             target_sequence_length = targets.size()[1]
@@ -141,7 +142,7 @@ class Ngrams2Seq(Model):
         else:
             num_decoding_steps = self._max_decoding_steps
         
-        decoder_hidden = final_encoder_output
+        decoder_hidden = encoder_outputs_summary
         decoder_context = Variable(encoder_outputs.data.new()
                                    .resize_(batch_size, self._decoder_output_dim).fill_(0))
         last_predictions = None
