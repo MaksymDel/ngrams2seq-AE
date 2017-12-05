@@ -6,9 +6,9 @@
 
 ### Visualizing attentions
 * Fetch https://github.com/M4t1ss/SoftAlignments.
-* Attention matrix, which is input to the tool, saves automaticaly under the name att_matrix.txt.
+* Attention matrix, which is an input to the tool, saves automaticaly under the name `att_matrix.txt`.
 * You can run a tool (e.g.) as a web server using following command (from SoftAlignments repository root folder): 
-`python process_alignments.py -i *path_to_ngrams2seq*/att_matrix.txt -o web -f Nematus`
+`python process_alignments.py -i **path_to_ngrams2seq**/att_matrix.txt -o web -f Nematus`
 
 ### TODO
 This experment proposes autoencoder that generates sentence from its bag of ngrams representation      
