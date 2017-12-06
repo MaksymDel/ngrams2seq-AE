@@ -9,7 +9,7 @@ from allennlp.nn.util import arrays_to_variables, sequence_cross_entropy_with_lo
 class SimpleSeq2SeqWithoutAttentionTest(ModelTestCase):
     def setUp(self):
         super(SimpleSeq2SeqWithoutAttentionTest, self).setUp()
-        self.set_up_model("tests/fixtures/test_experiment.json",
+        self.set_up_model("tests/fixtures/test_experiment.boe.json",
                           "tests/fixtures/seq2seq_copy.tsv")
 
     def test_encoder_decoder_can_train_save_and_load(self):
@@ -41,7 +41,7 @@ class SimpleSeq2SeqWithoutAttentionTest(ModelTestCase):
 class SimpleSeq2SeqWithAttentionTest(ModelTestCase):
     def setUp(self):
         super(SimpleSeq2SeqWithAttentionTest, self).setUp()
-        self.set_up_model("tests/fixtures/test_experiment.json",
+        self.set_up_model("tests/fixtures/test_experiment.boe.json",
                           "tests/fixtures/seq2seq_copy.tsv")
 
     def test_encoder_decoder_can_train_save_and_load(self):
