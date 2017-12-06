@@ -166,6 +166,14 @@ class Ngrams2Seq(Model):
 
             encoder_outputs_mask = source_mask.sum(2) != 0 # MANUAL MASKING CHANGE. PROBABLY SHOULD CHANGE IT UPPER AS WELL
             
+            # (TODO) DEBUG CUDA
+            print('enc outputs', encoder_outputs.is_cuda)
+            print('decoder hidden', decoder_hidden.is_cuda)
+            print('input_choices', input_choices.is_cuda)
+            print('encoder_outputs_mask', encoder_outputs_mask.is_cuda)
+
+
+
             decoder_input, attention_weights = self._prepare_decode_step_input(input_choices, decoder_hidden,
                                                             encoder_outputs, encoder_outputs_mask)
             decoder_hidden, decoder_context = self._decoder_cell(decoder_input,
