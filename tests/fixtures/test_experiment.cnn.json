@@ -5,7 +5,7 @@
       
       "source_tokenizer": {
         "type": "ngram",
-        "max_ngram_degree": 4
+        "max_ngram_degree": 2
       },
       
       "target_tokenizer": {
@@ -17,8 +17,8 @@
         "ngram_words": {
           "type": "words",
           "word_tokenizer": {
-              //"type": "word",
-              "word_splitter": {"type": "just_spaces"}
+              "word_splitter": {"type": "just_spaces"},
+              "end_tokens": ["@@PADDING@@", "@@PADDING@@", "@@PADDING@@", "@@PADDING@@"] 
           },
           "namespace": "shared_words_vocab"
         }
@@ -26,15 +26,15 @@
       
       "target_token_indexers": {
            "tokens": { 
-           "type": "single_id",
-           "namespace": "shared_words_vocab"
+               "type": "single_id",
+               "namespace": "shared_words_vocab"
            }
       }
     },
 
-    "train_data_path": "../../data/europarl/parallel_full.en",
-    "validation_data_path": "../../data/europarl/parallel_dev.en",
-    
+    "train_data_path": "tests/fixtures/seq2seq_copy.tsv",
+    "validation_data_path": "tests/fixtures/seq2seq_copy.tsv",
+
     "model": {
       "type": "ngrams2seq",
 
@@ -46,9 +46,10 @@
                 "vocab_namespace": "shared_words_vocab"                
             },
             "encoder": {
-                "type": "boe",
-                "embedding_dim": 50,
-                "averaged": false
+              "type": "cnn",
+              "embedding_dim": 50,
+              "num_filters": 50,
+              "ngram_filter_sizes": [5]
             },
         "dropout": 0
         }  
@@ -59,7 +60,7 @@
         "input_dim": 50
       },
 
-      "max_decoding_steps": 70,
+      "max_decoding_steps": 20,
       "target_namespace": "shared_words_vocab",
       "attention_function": {"type": "dot_product"},
       "scheduled_sampling_ratio": 1 // means not using teacher forcing
@@ -69,13 +70,13 @@
     "iterator": {
       "type": "bucket",
       "padding_noise": 0.0,
-      "batch_size" : 64
+      "batch_size" : 3
     },
 
     "trainer": {
-      "num_epochs": 40,
-      "patience": 4,
-      "cuda_device": 0,
+      "num_epochs": 200,
+      "patience": 10,
+      "cuda_device": -1,
       "optimizer": {
         "type": "adam",
         "lr": 0.001
