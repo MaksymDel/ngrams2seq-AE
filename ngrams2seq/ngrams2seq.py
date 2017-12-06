@@ -165,15 +165,7 @@ class Ngrams2Seq(Model):
                     input_choices = last_predictions
 
             encoder_outputs_mask = source_mask.sum(2) != 0 # MANUAL MASKING CHANGE. PROBABLY SHOULD CHANGE IT UPPER AS WELL
-            
-            # (TODO) DEBUG CUDA
-            print('enc outputs', encoder_outputs.is_cuda)
-            print('decoder hidden', decoder_hidden.is_cuda)
-            print('input_choices', input_choices.is_cuda)
-            print('encoder_outputs_mask', encoder_outputs_mask.is_cuda)
-
-
-
+          
             decoder_input, attention_weights = self._prepare_decode_step_input(input_choices, decoder_hidden,
                                                             encoder_outputs, encoder_outputs_mask)
             decoder_hidden, decoder_context = self._decoder_cell(decoder_input,
@@ -257,18 +249,10 @@ class Ngrams2Seq(Model):
             # encoder_outputs : (batch_size, input_sequence_length, encoder_output_dim)
             # Ensuring mask is also a FloatTensor. Or else the multiplication within attention will
             # complain.
-            print('BEFORE encoder_outputs_mask.is_cuda', encoder_outputs_mask.is_cuda)
-            
-            mask_type = None
-            if encoder_outputs_mask.is_cuda:
-                mask_type = torch.cuda.FloatTensor
-            else:
-                mask_type = torch.FloatTensor
+            mask_type = torch.cuda.FloatTensor if encoder_outputs_mask.is_cuda else torch.FloatTensor
             encoder_outputs_mask = encoder_outputs_mask.type(mask_type)
             # (batch_size, input_sequence_length)
             #decoder_hidden_state = decoder_hidden_state.unsqueeze(0)
-            print('AFTER encoder_outputs_mask.is_cuda', encoder_outputs_mask.is_cuda)
-
             input_weights = self._decoder_attention(decoder_hidden_state, encoder_outputs, encoder_outputs_mask)
             # TODO(maxdel): MOVE TO PROPER MODULE): PRINT ATTENTION
             # (batch_size, encoder_output_dim)
