@@ -5,7 +5,7 @@
       
       "source_tokenizer": {
         "type": "ngram",
-        "max_ngram_degree": 4
+        "max_ngram_degree": 3
       },
       
       "target_tokenizer": {
@@ -42,12 +42,12 @@
         "ngram_words": {
             "type": "word_encoding",
             "embedding": {
-                "embedding_dim": 50,
+                "embedding_dim": 25,
                 "vocab_namespace": "shared_words_vocab"                
             },
             "encoder": {
                 "type": "boe",
-                "embedding_dim": 50,
+                "embedding_dim": 25,
                 "averaged": false
             },
         "dropout": 0
@@ -56,7 +56,7 @@
 
       "encoder": {
         "type": "bypass_seq2seq",
-        "input_dim": 50
+        "input_dim": 25
       },
 
       "max_decoding_steps": 70,
@@ -69,7 +69,7 @@
     "iterator": {
       "type": "bucket",
       "padding_noise": 0.0,
-      "batch_size" : 64
+      "batch_size" : 32
     },
 
     "trainer": {
