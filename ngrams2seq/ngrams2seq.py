@@ -249,8 +249,7 @@ class Ngrams2Seq(Model):
             # encoder_outputs : (batch_size, input_sequence_length, encoder_output_dim)
             # Ensuring mask is also a FloatTensor. Or else the multiplication within attention will
             # complain.
-            mask_type = torch.cuda.FloatTensor if encoder_outputs_mask.is_cuda else torch.FloatTensor
-            encoder_outputs_mask = encoder_outputs_mask.type(mask_type)
+            encoder_outputs_mask = encoder_outputs_mask.float()
             # (batch_size, input_sequence_length)
             #decoder_hidden_state = decoder_hidden_state.unsqueeze(0)
             input_weights = self._decoder_attention(decoder_hidden_state, encoder_outputs, encoder_outputs_mask)
