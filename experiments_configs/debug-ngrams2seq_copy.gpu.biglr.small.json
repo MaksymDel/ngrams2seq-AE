@@ -32,7 +32,6 @@
       }
     },
 
-    "max_vocab_size": 30000,
     //"train_data_path": "../../data/europarl/parallel_full.en",
     "train_data_path": "inputs.txt",
 
