@@ -27,7 +27,7 @@ class Ngrams2SeqPredictor(Predictor):
         filename = 'att_matrix.txt'
 
         # convert src sentece to ngrams;
-        MAX_NGRAM_DEGREE = 2
+        MAX_NGRAM_DEGREE = 1
         ngrams_iterator = everygrams(src_tokens.split(), max_len=MAX_NGRAM_DEGREE)
         
         src_tokens = " ".join(["_".join(ngram) for ngram in ngrams_iterator])
