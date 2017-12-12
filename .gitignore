@@ -3,3 +3,9 @@ allennlp
 *.pyc
 .cache/
 experiments_models
+
+att_matrix.txt
+input-from-train.txt
+outputs.txt
+output.txt
+att_matrix.txt
