@@ -23,8 +23,15 @@ class NgramTokenizer(Tokenizer):
     # TODO(maxdel): add option for option left and rigth <SOS> and <EOS> symbols for each ngram.
     # It can be easily done with nltk's ngram function (it has corresponding formal arguments)
     def __init__(self,
-                 max_ngram_degree: int) -> None:
+                 max_ngram_degree: int,
+                 start_tokens: List[str] = None,
+                 end_tokens: List[str] = None) -> None:
         self._max_ngram_degree = max_ngram_degree
+        self._start_tokens = start_tokens or []
+        # We reverse the tokens here because we're going to insert them with `insert(0)` later;
+        # this makes sure they show up in the right order.
+        self._start_tokens.reverse()
+        self._end_tokens = end_tokens or []
 
     @overrides
     def tokenize(self, text: str) -> List[Token]:
@@ -33,6 +40,10 @@ class NgramTokenizer(Tokenizer):
         """
         ngrams_iterator = everygrams(text.split(), max_len=self._max_ngram_degree)
         tokens = [Token(" ".join(ngram)) for ngram in ngrams_iterator]
+        for start_token in self._start_tokens:
+            tokens.insert(0, Token(start_token, 0))
+        for end_token in self._end_tokens:
+            tokens.append(Token(end_token, -1))
         return tokens    
 
     @classmethod
