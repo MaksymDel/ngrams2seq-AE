@@ -44,5 +44,6 @@ class SimpleSeq2SeqWithAttentionTest(ModelTestCase):
         self.set_up_model("tests/fixtures/test_experiment.boe.json",
                           "tests/fixtures/seq2seq_copy.tsv")
 
+
     def test_encoder_decoder_can_train_save_and_load(self):
         self.ensure_model_can_train_save_and_load(self.param_file)

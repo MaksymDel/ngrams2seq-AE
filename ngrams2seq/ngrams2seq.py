@@ -138,6 +138,10 @@ class Ngrams2Seq(Model):
             target_sequence_length = targets.size()[1]
             # The last input from the target is either padding or the end symbol. Either way, we
             # don't have to process it.
+            # We use it at the last timestep to compute a loss together with  the 
+            # last generated symbol by the network. So that network learns to produce these <EOS> 
+            # symbols at the end
+            
             num_decoding_steps = target_sequence_length - 1
         else:
             num_decoding_steps = self._max_decoding_steps
