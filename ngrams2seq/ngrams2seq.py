@@ -29,7 +29,7 @@ class Ngrams2Seq(Model):
 
     This ``Ngrams2Seq`` model takes an dummy bypass encoder (:class:`BypassSeq2SeqEncoder`) as an input, and
     implements the functionality of the decoder.  In this implementation, the decoder uses the
-    encoder's outputs in two ways. The hidden state of the decoder is intialized with the output
+    encoder's outputs in two ways. The hidden state of the decoder is initialized with the output
     from the final time-step of the encoder, and when using attention, a weighted average of the
     outputs from the encoder is concatenated to the inputs of the decoder at every timestep. 
     
@@ -168,8 +168,8 @@ class Ngrams2Seq(Model):
                 else:
                     input_choices = last_predictions
 
-            encoder_outputs_mask = source_mask.sum(2) != 0 # MANUAL MASKING CHANGE. PROBABLY SHOULD CHANGE IT UPPER AS WELL
-          
+            encoder_outputs_mask = source_mask 
+
             decoder_input, attention_weights = self._prepare_decode_step_input(input_choices, decoder_hidden,
                                                             encoder_outputs, encoder_outputs_mask)
             decoder_hidden, decoder_context = self._decoder_cell(decoder_input,
@@ -178,7 +178,7 @@ class Ngrams2Seq(Model):
             output_projections = self._output_projection_layer(decoder_hidden)
             # list of (batch_size, 1, num_classes)
             step_logits.append(output_projections.unsqueeze(1))
-            class_probabilities = F.softmax(output_projections)
+            class_probabilities = F.softmax(output_projections, dim=-1)
             _, predicted_classes = torch.max(class_probabilities, 1)
             step_probabilities.append(class_probabilities.unsqueeze(1))
             last_predictions = predicted_classes
@@ -257,11 +257,10 @@ class Ngrams2Seq(Model):
             # (batch_size, input_sequence_length)
             #decoder_hidden_state = decoder_hidden_state.unsqueeze(0)
             input_weights = self._decoder_attention(decoder_hidden_state, encoder_outputs, encoder_outputs_mask)
-            # TODO(maxdel): MOVE TO PROPER MODULE): PRINT ATTENTION
             # (batch_size, encoder_output_dim)
             attended_input = weighted_sum(encoder_outputs, input_weights)
             # (batch_size, encoder_output_dim + target_embedding_dim)
-            return torch.cat((attended_input, embedded_input), -1), input_weights
+            return torch.cat((attended_input, embedded_input), -1), input_weights # TODO(maxdel): document this attention matrix return
         else:
             return embedded_input, None # TODO(maxdel): document this attention matrix return
 
@@ -320,11 +319,6 @@ class Ngrams2Seq(Model):
             predicted_tokens = [self.vocab.get_token_from_index(x, namespace=self._target_namespace) # Allennlp bug: do not hardcore this!
                                 for x in indices]
             all_predicted_tokens.append(predicted_tokens)
-
-        # if len(all_predicted_tokens) == 1:
-        #     all_predicted_tokens = all_predicted_tokens[0]  # type: ignore
-        # (TODO: make PR) lines above should be uncommented, since Model.forward_on_instance (from model.py) 
-        # expects 1st dimention to be batch size
             
         output_dict["predicted_tokens"] = all_predicted_tokens
 

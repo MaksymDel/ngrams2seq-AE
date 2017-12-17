@@ -47,10 +47,12 @@
                 "vocab_namespace": "shared_words_vocab"                
             },
             "encoder": {
-                "type": "boe",
-                "embedding_dim": 50,
-                "averaged": false
-            },
+              "type": "rnn",
+              "bidirectional": false,
+              "input_size": 50,
+              "hidden_size": 50
+          },
+
         "dropout": 0
         }  
       },
