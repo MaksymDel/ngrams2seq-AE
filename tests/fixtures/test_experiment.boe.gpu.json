@@ -72,7 +72,7 @@
     },
 
     "trainer": {
-      "num_epochs": 200,
+      "num_epochs": 3,
       "patience": 10,
       "optimizer": {
         "type": "adam",
