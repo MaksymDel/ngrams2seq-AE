@@ -3,6 +3,7 @@ allennlp
 *.pyc
 .cache/
 experiments_models
+experiments_models_big
 
 input-from-train.txt
 output.txt
