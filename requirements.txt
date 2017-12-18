@@ -1,2 +1,2 @@
-git+git://github.com/allenai/allennlp@928bbb9414fd4cadcc3f00bc131f8e23b2f15ec0
+allennlp==0.3
 nltk
